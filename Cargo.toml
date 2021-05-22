@@ -1,0 +1,12 @@
+[package]
+name = "lean"
+version = "0.1.0"
+authors = ["Rerumu"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bit_field = "0.10.1"
+nom = "6.1.2"
+num_enum = "0.5.1"
