@@ -4,9 +4,7 @@
 #include "lprefix.h"
 
 #include <float.h>
-#include <limits.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,15 +12,11 @@
 
 #include "lauxlib.h"
 #include "ldebug.h"
-#include "ldo.h"
 #include "lfunc.h"
 #include "lgc.h"
 #include "lobject.h"
 #include "lopcodes.h"
-#include "lstate.h"
-#include "lstring.h"
 #include "ltable.h"
-#include "ltm.h"
 #include "lualib.h"
 #include "lvm.h"
 
