@@ -318,7 +318,7 @@
     lua_update_inst(baked);                                                    \
     const TValue *slot;                                                        \
     int c = GETARG_B(i);                                                       \
-    TValue const rc = RKC(i);                                                  \
+    TValue rc = RKC(i);                                                        \
     if (luaV_fastgeti(L, s2v(ra), c, slot)) {                                  \
       luaV_finishfastset(L, s2v(ra), slot, &rc);                               \
     } else {                                                                   \
@@ -371,7 +371,7 @@
     lua_update_inst(baked);                                                    \
     const TValue *slot;                                                        \
     TValue *rb = vRB(i);                                                       \
-    TValue const rc = RKC(i);                                                  \
+    TValue rc = RKC(i);                                                        \
     TString *key = tsvalue(&rc);                                               \
     setobj2s(L, ra + 1, rb);                                                   \
     if (luaV_fastget(L, rb, key, slot, luaH_getstr)) {                         \
@@ -608,7 +608,7 @@
     lua_update_inst(baked);                                                    \
     int const n = GETARG_B(i);                                                 \
     L->top = ra + n;                                                           \
-    ProtectNT(luaV_concat(L, n));                                              \
+    luaV_concat(L, n);                                                         \
     lua_check_gc(L, L->top);                                                   \
   }
 
@@ -861,8 +861,6 @@
     L->top = ra + 4 + 3;                                                       \
     luaD_call(L, ra + 4, GETARG_C(i));                                         \
     lua_update_stack(ci);                                                      \
-                                                                               \
-    goto on_true;                                                              \
   }
 #define TForLoop(baked, on_true, on_false)                                     \
   {                                                                            \
