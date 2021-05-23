@@ -23,12 +23,20 @@ int lua_main(lua_State *L) {
   }
 
   luaA_wrap_closure(L, L->top - 1, lua_func_0);
-  lua_call(L, 0, 0);
+
+  int num_arg = lua_tointeger(L, 1);
+  char **list_arg = lua_touserdata(L, 2);
+
+  for (int i = 1; i < num_arg; i += 1) {
+    lua_pushstring(L, list_arg[i]);
+  }
+
+  lua_call(L, num_arg - 1, 0);
 
   return 0;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   lua_State *L = luaL_newstate();
 
   if (L == NULL) {
@@ -40,8 +48,10 @@ int main() {
 
   lua_pushcfunction(L, &lua_error_handler);
   lua_pushcfunction(L, &lua_main);
+  lua_pushinteger(L, argc);
+  lua_pushlightuserdata(L, argv);
 
-  int status = lua_pcall(L, 0, 0, -2);
+  int status = lua_pcall(L, 2, 0, -4);
 
   if (status != LUA_OK) {
     char const *msg = lua_tostring(L, -1);
