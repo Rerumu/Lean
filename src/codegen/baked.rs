@@ -14,16 +14,13 @@ checkstackGCp(L, `NUM_STACK`, ci->func);
 StkId base = ci->func + 1;
 ";
 
-pub const LUA_IS_VARARG: &str = "
-int param_offset = cast_int(L->top - base);
-
-if (`NUM_PARAM` != 0 && param_offset < `NUM_PARAM`) {
-	param_offset = `NUM_PARAM`;
-}
-";
-
 pub const LUA_NUM_PARAM: &str = "
-for (int i = cast_int(L->top - base); i < `NUM_PARAM`; i += 1) {
-	setnilvalue(s2v(base + i));
+StkId param_end = base + `NUM_PARAM`;
+
+while (L->top < param_end) {
+	setnilvalue(s2v(L->top));
+	L->top++;
 }
 ";
+
+pub const LUA_NUM_VARARG: &str = "int const n_vararg = cast_int(L->top - base) - `NUM_PARAM`;";

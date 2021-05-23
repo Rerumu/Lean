@@ -741,8 +741,10 @@
       checkstackGCp(L, 1, ra);                                                 \
     }                                                                          \
                                                                                \
-    if (GETARG_C(i)) {                                                         \
-      ci->func -= param_offset;                                                \
+    int n_param = GETARG_C(i);                                                 \
+                                                                               \
+    if (n_param) {                                                             \
+      ci->func -= n_vararg + n_param;                                          \
     }                                                                          \
                                                                                \
     if (ttisLclosure(s2v(ra))) {                                               \
@@ -762,6 +764,7 @@
   {                                                                            \
     lua_update_inst(baked);                                                    \
     int n = GETARG_B(i) - 1;                                                   \
+                                                                               \
     if (n < 0)                                                                 \
       n = cast_int(L->top - ra);                                               \
                                                                                \
@@ -772,8 +775,10 @@
       lua_update_stack(ci);                                                    \
     }                                                                          \
                                                                                \
-    if (GETARG_C(i)) {                                                         \
-      ci->func -= param_offset;                                                \
+    int n_param = GETARG_C(i);                                                 \
+                                                                               \
+    if (n_param) {                                                             \
+      ci->func -= n_vararg + n_param;                                          \
     }                                                                          \
                                                                                \
     L->top = ra + n;                                                           \
@@ -915,12 +920,13 @@
     lua_update_inst(baked);                                                    \
     int n = GETARG_C(i) - 1;                                                   \
     lua_save_top(L, ci);                                                       \
-    luaT_getvarargs(L, ci, ra, n);                                             \
+    luaA_get_varargs(L, ci, ra, n, n_vararg);                                  \
+    lua_update_base(ci);                                                       \
   }
 
 #define VarargPrep(baked)                                                      \
   {                                                                            \
-    luaA_adjustvarargs(L, GETARG_A(baked), ci, cl->p);                         \
+    luaA_set_varargs(L, ci, GETARG_A(baked), cl->p->maxstacksize);             \
     lua_update_base(ci);                                                       \
   }
 

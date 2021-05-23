@@ -1,7 +1,7 @@
 use crate::{
 	codegen::baked::{
-		LUA_INIT_CODE, LUA_INTERP_BOILERPLATE, LUA_IS_VARARG, LUA_MACRO_BOILERPLATE, LUA_NUM_PARAM,
-		LUA_SETUP_BOILERPLATE,
+		LUA_INIT_CODE, LUA_INTERP_BOILERPLATE, LUA_MACRO_BOILERPLATE, LUA_NUM_PARAM,
+		LUA_NUM_VARARG, LUA_SETUP_BOILERPLATE,
 	},
 	common::types::{Inst, Opcode, Proto, Target, Value},
 	dumper::dump_lua_module,
@@ -159,20 +159,16 @@ fn write_init(w: &mut dyn Write, proto: &Proto) -> Result<()> {
 	write!(w, "{}", LUA_INIT_CODE.replace("`NUM_STACK`", &num_stack))?;
 	write_const_list(w, proto)?;
 
-	match (proto.is_vararg, proto.num_param) {
-		(0, _) => write!(w, "int const param_offset = 0;"),
-		(_, 0) => write!(w, "int const param_offset = cast_int(L->top - base);"),
-		(_, num) => {
-			let num_param = num.to_string();
-
-			write!(w, "{}", LUA_IS_VARARG.replace("`NUM_PARAM`", &num_param))
-		}
-	}?;
-
 	if proto.num_param != 0 {
-		let num_param = proto.num_param.to_string();
+		let num = proto.num_param.to_string();
 
-		write!(w, "{}", LUA_NUM_PARAM.replace("`NUM_PARAM`", &num_param))?;
+		write!(w, "{}", LUA_NUM_PARAM.replace("`NUM_PARAM`", &num))?;
+	}
+
+	if proto.is_vararg != 0 {
+		let num = proto.num_param.to_string();
+
+		write!(w, "{}", LUA_NUM_VARARG.replace("`NUM_PARAM`", &num))?;
 	}
 
 	Ok(())
