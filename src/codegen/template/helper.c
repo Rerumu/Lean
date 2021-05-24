@@ -432,7 +432,7 @@ void luaA_pretailcall(lua_State *L, CallInfo *ci, StkId func, int args) {
     setobjs2s(L, ci->func + i, func + i);
   }
 
-  ci->top = ci->func + args;
+  ci->top = func + args;
   L->top = ci->top;
 }
 

@@ -748,16 +748,16 @@
     }                                                                          \
                                                                                \
     if (ttisLclosure(s2v(ra))) {                                               \
-      L->nCcalls -= 1;                                                         \
       luaD_pretailcall(L, ci, ra, b);                                          \
       luaD_call(L, ci->func, LUA_MULTRET);                                     \
-      L->nCcalls += 1;                                                         \
     } else {                                                                   \
       luaA_pretailcall(L, ci, ra, b);                                          \
       luaD_precall(L, ra, LUA_MULTRET);                                        \
     }                                                                          \
                                                                                \
-    return LUA_MULTRET;                                                        \
+    lua_update_stack(ci);                                                      \
+                                                                               \
+    return cast_int(L->top - ra);                                              \
   }
 
 #define Return(baked)                                                          \
