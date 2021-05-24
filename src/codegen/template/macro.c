@@ -746,12 +746,12 @@
       luaD_call(L, ci->func, LUA_MULTRET);                                     \
     } else {                                                                   \
       luaA_pretailcall(L, ci, ra, b);                                          \
-      luaD_precall(L, ra, LUA_MULTRET);                                        \
+      luaD_precall(L, ci->func, LUA_MULTRET);                                  \
     }                                                                          \
                                                                                \
     lua_update_stack(ci);                                                      \
                                                                                \
-    return cast_int(L->top - ra);                                              \
+    return cast_int(L->top - ci->func);                                        \
   }
 
 #define Return(baked)                                                          \
