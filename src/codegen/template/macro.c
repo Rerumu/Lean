@@ -709,13 +709,7 @@
     if (b != 0)                                                                \
       L->top = ra + b;                                                         \
                                                                                \
-    CallInfo *post = luaD_precall(L, ra, nresults);                            \
-                                                                               \
-    if (post != NULL) {                                                        \
-      post->callstatus = CIST_FRESH;                                           \
-      luaV_execute(L, post);                                                   \
-    }                                                                          \
-                                                                               \
+    luaD_callnoyield(L, ra, LUA_MULTRET);                                      \
     lua_update_base(ci);                                                       \
   }
 
