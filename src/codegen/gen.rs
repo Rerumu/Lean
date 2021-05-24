@@ -165,7 +165,9 @@ fn write_init(w: &mut dyn Write, proto: &Proto) -> Result<()> {
 		write!(w, "{}", LUA_NUM_PARAM.replace("`NUM_PARAM`", &num))?;
 	}
 
-	if proto.is_vararg != 0 {
+	if proto.is_vararg == 0 {
+		write!(w, "int const n_vararg = 0;")?;
+	} else {
 		let num = proto.num_param.to_string();
 
 		write!(w, "{}", LUA_NUM_VARARG.replace("`NUM_PARAM`", &num))?;
