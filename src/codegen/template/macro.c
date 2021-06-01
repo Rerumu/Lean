@@ -820,21 +820,12 @@
 #define ForLoop(baked, on_true, on_false)                                      \
   {                                                                            \
     lua_update_inst(baked);                                                    \
-    if (ttisinteger(s2v(ra + 2))) {                                            \
-      lua_Unsigned count = l_castS2U(ivalue(s2v(ra + 1)));                     \
-      if (count > 0) {                                                         \
-        lua_Integer step = ivalue(s2v(ra + 2));                                \
-        lua_Integer idx = ivalue(s2v(ra));                                     \
-        chgivalue(s2v(ra + 1), count - 1);                                     \
-        idx = intop(+, idx, step);                                             \
-        chgivalue(s2v(ra), idx);                                               \
-        setivalue(s2v(ra + 3), idx);                                           \
-        goto on_true;                                                          \
-      }                                                                        \
-    } else if (floatforloop(ra))                                               \
-      goto on_true;                                                            \
-                                                                               \
-    goto on_false;                                                             \
+    int cond = ttisinteger(s2v(ra)) ? iter_integer(ra) : iter_number(ra);      \
+\    
+    if (cond)\
+      goto on_true;\
+    else\
+      goto on_false;\
   }
 #define ForPrep(baked, on_true, on_false)                                      \
   {                                                                            \
