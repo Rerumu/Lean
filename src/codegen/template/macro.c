@@ -821,11 +821,11 @@
   {                                                                            \
     lua_update_inst(baked);                                                    \
     int cond = ttisinteger(s2v(ra)) ? iter_integer(ra) : iter_number(ra);      \
-\    
-    if (cond)\
-      goto on_true;\
-    else\
-      goto on_false;\
+                                                                               \
+    if (cond)                                                                  \
+      goto on_true;                                                            \
+    else                                                                       \
+      goto on_false;                                                           \
   }
 #define ForPrep(baked, on_true, on_false)                                      \
   {                                                                            \
