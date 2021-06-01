@@ -709,7 +709,7 @@
     if (b != 0)                                                                \
       L->top = ra + b;                                                         \
                                                                                \
-    luaD_callnoyield(L, ra, LUA_MULTRET);                                      \
+    luaD_callnoyield(L, ra, nresults);                                         \
     lua_update_base(ci);                                                       \
   }
 
