@@ -319,7 +319,7 @@ static int forprep(lua_State *L, StkId ra) {
 ** true iff the loop must continue. (The integer case is
 ** written online with opcode OP_FORLOOP, for performance.)
 */
-static int floatforloop(StkId ra) {
+static int iter_number(StkId ra) {
   lua_Number step = fltvalue(s2v(ra + 2));
   lua_Number limit = fltvalue(s2v(ra + 1));
   lua_Number idx = fltvalue(s2v(ra)); /* internal index */
@@ -328,8 +328,22 @@ static int floatforloop(StkId ra) {
     chgfltvalue(s2v(ra), idx);     /* update internal index */
     setfltvalue(s2v(ra + 3), idx); /* and control variable */
     return 1;                      /* jump back */
-  } else
-    return 0; /* finish the loop */
+  }
+  return 0;
+}
+
+static int iter_integer(StkId ra) {
+  lua_Unsigned count = l_castS2U(ivalue(s2v(ra + 1)));
+  if (count > 0) {
+    lua_Integer step = ivalue(s2v(ra + 2));
+    lua_Integer idx = ivalue(s2v(ra));
+    chgivalue(s2v(ra + 1), count - 1);
+    idx = intop(+, idx, step);
+    chgivalue(s2v(ra), idx);
+    setivalue(s2v(ra + 3), idx);
+    return 1;
+  }
+  return 0;
 }
 
 /*
