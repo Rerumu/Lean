@@ -59,7 +59,7 @@ pub fn load_unsigned(input: &[u8]) -> Res<Unsigned> {
 	let (input, head) = map(verify(u8::deser, |v| v & 0x80 != 0), |v| v & 0x7F)(input)?;
 	let result = tail
 		.iter()
-		.cloned()
+		.copied()
 		.chain(once(head))
 		.fold(0, |acc, x| acc << 7 | Unsigned::from(x));
 
