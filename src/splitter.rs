@@ -75,11 +75,7 @@ impl Splitter {
 			self.label_set.insert(pc + 1);
 		}
 
-		//self.label_set.retain(|&v| v < code.len());
-		self.label_set = std::mem::take(&mut self.label_set)
-			.into_iter()
-			.filter(|&v| v <= code.len())
-			.collect();
+		self.label_set.retain(|&v| v <= code.len());
 	}
 
 	fn get_offset_target(&self, post: usize, offset: i32) -> Target {
